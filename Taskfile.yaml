@@ -1,0 +1,15 @@
+version: '3'
+
+tasks:
+  default:
+    deps:
+    - check
+    - style
+    cmds:
+      - task --list-all
+  style:
+      cmds:
+        - stylua .
+  check:
+      cmds:
+        - luacheck .
