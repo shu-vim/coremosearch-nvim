@@ -15,7 +15,7 @@ M.config = {
     { bg = '#BBBB00', fg = 'white' },
     { bg = '#0050BB', fg = 'white' },
   },
-  nohlsearch = true
+  nohlsearch = true,
 }
 
 local function escape(s) return vim.fn['escape'](s, [[\$.*/[]^"]]) end
