@@ -49,6 +49,12 @@ end
 function M.refresh_hightlights(words)
   if vim.o.hlsearch then return end
 
+  if vim.o.ignorecase then
+    vim.cmd([[syntax case ignore]])
+  else
+    vim.cmd([[syntax case match]])
+  end
+
   local lazyredraw = vim.o.lazyredraw
   vim.o.lazyredraw = true
   M.init_highlights()
