@@ -158,6 +158,13 @@ function M.edit()
 
     vim.cmd('normal 4gg')
     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-L>', true, true, true), 'n', true)
+
+    local ui = vim.api.nvim_list_uis()[1]
+    local config = vim.api.nvim_win_get_config(win)
+    config.relative = 'editor'
+    config.row = math.ceil((ui.height - #words) / 2)
+    config.col = math.ceil((ui.width - maxwid) / 2)
+    vim.api.nvim_win_set_config(win, config)
   end
 
   -- cancel if any floating window exists
