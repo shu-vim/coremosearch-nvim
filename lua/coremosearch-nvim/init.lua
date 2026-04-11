@@ -218,6 +218,39 @@ function M.edit()
   redraw(win)
 end
 
+function M.quickfix()
+  local lazyredraw = vim.o.lazyredraw
+  vim.o.lazyredraw = true
+
+  local list = {}
+  local buf = vim.api.nvim_get_current_buf()
+  local save_cursor = vim.api.nvim_win_get_cursor(0)
+
+  vim.api.nvim_win_set_cursor(0, { 1, 0 })
+
+  local pattern = vim.fn['getreg']('/')
+  while true do
+    local pos = vim.fn['searchpos'](pattern, 'W')
+    if pos[1] == 0 then break end
+
+    local item = {
+      bufnr = buf,
+      lnum = pos[1],
+      col = pos[2],
+      text = vim.fn['getline'](pos[1]),
+    }
+    table.insert(list, item)
+  end
+
+  vim.api.nvim_win_set_cursor(0, save_cursor)
+  vim.o.lazyredraw = lazyredraw
+
+  vim.fn['setqflist']({}, 'f')
+  vim.fn['setqflist'](list, 'a')
+
+  vim.cmd([[copen]])
+end
+
 return M
 
 -- vim: set et ft=lua sts=2 sw=2 ts=2 :

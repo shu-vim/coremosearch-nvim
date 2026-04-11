@@ -35,6 +35,8 @@ Enabled by default on startup.
   - redraw highlights for search words
 - CoremoSearchNoHighlight
   - stop the highlighting like `:noh[lsearch]`
+- CoremoSearchQuickFix
+  - list matches in quickfix
 
 ## Setup/Config
 
