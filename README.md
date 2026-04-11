@@ -19,24 +19,28 @@ Enabled by default on startup.
 
 - CoremoSearchAdd
   - `:CoremoSearchAdd [word ...]`
-  - add search words
+  - adds search words
   - or a word under the cursor
   - or selected text
 - CoremoSearchRemove
   - `:CoremoSearchRemove [word ...]`
-  - remove search words
+  - removes search words
   - or a word under the cursor
   - or selected text
 - CoremoSearchEdit
-  - edit search words in a pop-up window
+  - opens a words-list, you edit search words in the list window
+- CoremoSearchJump
+  - opens a jump list
+  - `j`, `k`: select a word
+  - `h`, `l`: jump to prev/next position
 - CoremoSearchClear
-  - clear all search words
+  - clears all search words
 - CoremoSearchRefresh
-  - redraw highlights for search words
+  - redraws highlights for search words
 - CoremoSearchNoHighlight
-  - stop the highlighting like `:noh[lsearch]`
+  - stops the highlighting like `:noh[lsearch]`
 - CoremoSearchQuickFix
-  - list matches in quickfix
+  - lists matches in quickfix
 
 ## Setup/Config
 

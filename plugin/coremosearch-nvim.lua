@@ -19,4 +19,5 @@ vim.api.nvim_create_user_command('CoremoSearchClear', cs.clear, {})
 vim.api.nvim_create_user_command('CoremoSearchNoHighlight', cs.nohighlight, {})
 
 vim.api.nvim_create_user_command('CoremoSearchEdit', cs.edit, {})
+vim.api.nvim_create_user_command('CoremoSearchJump', cs.jump, {})
 vim.api.nvim_create_user_command('CoremoSearchQuickFix', cs.quickfix, {})

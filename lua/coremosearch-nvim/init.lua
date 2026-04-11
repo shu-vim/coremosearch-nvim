@@ -224,6 +224,97 @@ function M.edit()
   redraw(win)
 end
 
+function M.jump()
+  local origwin = vim.api.nvim_get_current_win()
+  local words = M.split_regexp(M.strip_magic(vim.fn['getreg']('/')))
+
+  local menu_close = function(win) vim.api.nvim_win_close(win, false) end
+  local redraw = function(win)
+    local maxwid = 0
+    for _, word in ipairs(words) do
+      local wid = vim.fn['strdisplaywidth'](word)
+      if maxwid < wid then maxwid = wid end
+    end
+    vim.api.nvim_win_set_width(win, maxwid)
+    vim.api.nvim_win_set_height(win, #words)
+
+    vim.api.nvim_win_set_option(win, 'modifiable', true)
+    vim.api.nvim_win_set_option(win, 'readonly', false)
+    vim.api.nvim_buf_set_lines(vim.api.nvim_win_get_buf(win), 0, -1, true, words)
+    vim.api.nvim_win_set_option(win, 'readonly', false)
+    vim.api.nvim_win_set_option(win, 'modifiable', false)
+
+    vim.cmd('normal gg')
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-L>', true, true, true), 'n', true)
+
+    local ui = vim.api.nvim_list_uis()[1]
+    local config = vim.api.nvim_win_get_config(win)
+    config.relative = 'editor'
+    config.row = math.ceil((ui.height - #words) / 2)
+    config.col = math.ceil((ui.width - maxwid))
+    vim.api.nvim_win_set_config(win, config)
+
+    M.refresh_hightlights(words)
+  end
+
+  -- cancel if any floating window exists
+  for _, win in pairs(vim.api.nvim_tabpage_list_wins(0)) do
+    if vim.api.nvim_win_get_config(win).zindex then
+      local ok, _ = pcall(vim.api.nvim_win_get_var, win, 'CoremoSearch__list')
+      if ok then return end
+    end
+  end
+
+  local buf = vim.api.nvim_create_buf(false, true)
+  local win = vim.api.nvim_open_win(buf, true, {
+    relative = 'cursor',
+    row = 1,
+    col = 0,
+    width = 1,
+    height = 1,
+    border = (vim.o.ambiwidth == 'double' and { '*', '-', [[\]], '|', '/', '-', [[\]], '|' }) or 'rounded',
+    noautocmd = true,
+  })
+  vim.api.nvim_create_autocmd('BufLeave', {
+    buffer = buf,
+    callback = function()
+      if not vim.api.nvim_win_get_var(win, 'stay') then menu_close(win) end
+    end,
+  })
+  vim.fn.matchadd('Comment', [[\v^#.+]], 0, -1, { window = win })
+  vim.api.nvim_win_set_option(win, 'number', false)
+  vim.api.nvim_win_set_option(win, 'relativenumber', false)
+  vim.api.nvim_win_set_option(win, 'wrap', false)
+  vim.api.nvim_win_set_option(win, 'cursorline', false)
+  vim.api.nvim_win_set_var(win, 'CoremoSearch__list', {})
+
+  -- keymap
+  vim.keymap.set('n', '<Esc>', function() menu_close(win) end, { buffer = buf })
+  vim.keymap.set('n', 'q', function() menu_close(win) end, { buffer = buf })
+  vim.keymap.set('n', 'l', function()
+    local word = vim.fn['getline']('.')
+    vim.api.nvim_win_set_var(win, 'stay', true)
+    vim.api.nvim_set_current_win(origwin)
+    vim.defer_fn(function()
+      vim.fn['search'](word, '')
+      vim.api.nvim_set_current_win(win)
+    end, 1)
+    vim.api.nvim_win_set_var(win, 'stay', false)
+  end, { buffer = buf })
+  vim.keymap.set('n', 'h', function()
+    local word = vim.fn['getline']('.')
+    vim.api.nvim_win_set_var(win, 'stay', true)
+    vim.api.nvim_set_current_win(origwin)
+    vim.defer_fn(function()
+      vim.fn['search'](word, 'b')
+      vim.api.nvim_set_current_win(win)
+    end, 1)
+    vim.api.nvim_win_set_var(win, 'stay', false)
+  end, { buffer = buf })
+
+  redraw(win)
+end
+
 function M.quickfix()
   local lazyredraw = vim.o.lazyredraw
   vim.o.lazyredraw = true
