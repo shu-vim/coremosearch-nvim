@@ -15,6 +15,7 @@ M.config = {
     { bg = '#BBBB00', fg = 'white' },
     { bg = '#0050BB', fg = 'white' },
   },
+  highlight_exceeded = { link = 'Search' },
   nohlsearch = true,
 }
 
@@ -37,10 +38,11 @@ end
 
 function M.init_highlights()
   for i, hi in ipairs(M.config.highlights) do
-    pcall(vim.cmd, 'syntax clear CoremoSearch' .. tostring(i))
     vim.cmd('highlight clear CoremoSearch' .. tostring(i))
+    pcall(vim.cmd, 'syntax clear CoremoSearch' .. tostring(i))
     vim.api.nvim_set_hl(0, 'CoremoSearch' .. tostring(i), hi)
   end
+  vim.api.nvim_set_hl(0, 'CoremoSearch', M.config.highlight_exceeded)
 end
 
 function M.refresh_hightlights(words)
@@ -52,8 +54,11 @@ function M.refresh_hightlights(words)
 
   for i, word in ipairs(words) do
     vim.notify('highlight ' .. tostring(i) .. ' ' .. word, 'debug')
-    vim.cmd('syntax clear CoremoSearch' .. tostring(i))
-    vim.cmd('syntax match CoremoSearch' .. tostring(i) .. ' "' .. word .. '" containedin=ALL')
+    if i <= #M.config.highlights then
+      vim.cmd('syntax match CoremoSearch' .. tostring(i) .. ' "' .. word .. '" containedin=ALL')
+    else
+      vim.cmd('syntax match CoremoSearch' .. ' "' .. word .. '" containedin=ALL')
+    end
   end
   vim.o.lazyredraw = lazyredraw
 end
