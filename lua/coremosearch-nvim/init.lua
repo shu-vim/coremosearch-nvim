@@ -140,7 +140,6 @@ end
 
 function M.edit()
   local words = M.split_regexp(M.strip_magic(vim.fn['getreg']('/')))
-  if #words == 0 then return end
   table.insert(words, 1, '# edit search words')
   table.insert(words, 2, '# <C-S>: apply')
   table.insert(words, 3, '# Esc, q: cancel')
