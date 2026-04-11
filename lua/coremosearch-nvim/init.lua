@@ -42,6 +42,7 @@ function M.init_highlights()
     pcall(vim.cmd, 'syntax clear CoremoSearch' .. tostring(i))
     vim.api.nvim_set_hl(0, 'CoremoSearch' .. tostring(i), hi)
   end
+  pcall(vim.cmd, 'syntax clear CoremoSearch')
   vim.api.nvim_set_hl(0, 'CoremoSearch', M.config.highlight_exceeded)
 end
 
