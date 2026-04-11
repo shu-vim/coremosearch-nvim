@@ -143,6 +143,8 @@ function M.clear()
   M.refresh_hightlights({})
 end
 
+function M.nohighlight() M.init_highlights() end
+
 function M.edit()
   local words = M.split_regexp(M.strip_magic(vim.fn['getreg']('/')))
   table.insert(words, 1, '# edit search words')

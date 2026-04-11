@@ -33,6 +33,8 @@ Enabled by default on startup.
   - clear all search words
 - CoremoSearchRefresh
   - redraw highlights for search words
+- CoremoSearchNoHighlight
+  - stop the highlighting like `:noh[lsearch]`
 
 ## Setup/Config
 
