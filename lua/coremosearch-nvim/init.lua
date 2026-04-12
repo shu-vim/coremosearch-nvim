@@ -291,6 +291,7 @@ function M.jump()
   -- keymap
   vim.keymap.set('n', '<Esc>', function() menu_close(win) end, { buffer = buf })
   vim.keymap.set('n', 'q', function() menu_close(win) end, { buffer = buf })
+  vim.keymap.set('n', '<Enter>', function() menu_close(win) end, { buffer = buf })
   vim.keymap.set('n', 'l', function()
     local word = vim.fn['getline']('.')
     vim.api.nvim_win_set_var(win, 'stay', true)
