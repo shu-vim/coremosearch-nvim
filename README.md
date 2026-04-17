@@ -64,7 +64,14 @@ return {
       { bg = '#BBBB00', fg = 'white' },
       { bg = '#0050BB', fg = 'white' },
     },
-    nohlsearch = true
+    highlight_exceeded = { link = 'Search' },
+    --
+    word_boundary_if_noargs = true,
+    -- true: `:CoremoSearchAdd<CR>` adds \<word_under_the_cursor\>
+    -- false: adds `word_under_the_cursor`
+    --
+    nohlsearch = true,
+    -- true: set nohls on startup.
   },
 }
 ```
