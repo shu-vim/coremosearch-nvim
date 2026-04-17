@@ -20,6 +20,7 @@ M.config = {
   word_boundary_if_noargs = true,
   --
   nohlsearch = true,
+  use_search_hook = false,
 }
 
 local function escape(s) return vim.fn['escape'](s, [[\$.*/[]^"]]) end
@@ -32,6 +33,13 @@ function M.setup(args)
   M.config = vim.tbl_deep_extend('force', M.config, args or {})
 
   if M.config.nohlsearch then vim.o.hlsearch = false end
+
+  if M.config.use_search_hook then
+    vim.keymap.set('n', '/', ':silent let v:searchforward = 1<CR>:CoremoSearchAdd ')
+    vim.keymap.set('n', '*', ':silent let v:searchforward = 1<CR>:CoremoSearchAdd<CR>')
+    vim.keymap.set('n', '?', ':silent let v:searchforward = 0<CR>:CoremoSearchAdd ')
+    vim.keymap.set('n', '#', ':silent let v:searchforward = 0<CR>:CoremoSearchAdd<CR>')
+  end
 end
 
 function M.strip_magic(expr)

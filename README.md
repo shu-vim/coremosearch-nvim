@@ -72,6 +72,9 @@ return {
     --
     nohlsearch = true,
     -- true: set nohls on startup.
+    --
+    use_search_hook = false,
+    -- true: hook / * ? # to use :CoremoSearchAdd
   },
 }
 ```
