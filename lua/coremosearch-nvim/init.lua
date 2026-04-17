@@ -84,7 +84,9 @@ function M.add_search(words)
   end
   vim.notify('all: ' .. vim.inspect(all), 'debug')
 
+  local searchforward = vim.v.searchforward
   vim.fn['setreg']('/', [[\V]] .. table.concat(all, [[\|]]))
+  vim.v.searchforward = searchforward
   M.refresh_hightlights(all)
 end
 
@@ -105,7 +107,9 @@ function M.remove_search(words)
     return
   end
 
+  local searchforward = vim.v.searchforward
   vim.fn['setreg']('/', [[\V]] .. table.concat(all, [[\|]]))
+  vim.v.searchforward = searchforward
   M.refresh_hightlights(all)
 end
 
@@ -216,7 +220,9 @@ function M.edit()
   vim.keymap.set({ 'n', 'i' }, '<C-S>', function()
     local newwords = vim.api.nvim_buf_get_lines(0, 0, -1, {})
     newwords = vim.tbl_filter(function(word) return string.sub(word, 1, 1) ~= '#' and word ~= '' end, newwords)
+    local searchforward = vim.v.searchforward
     vim.fn['setreg']('/', [[\V]] .. table.concat(newwords, [[\|]]))
+    vim.v.searchforward = searchforward
     menu_close(win)
     M.refresh_hightlights(newwords)
   end, { buffer = buf })
