@@ -281,6 +281,7 @@ function M.jump()
     border = (vim.o.ambiwidth == 'double' and { '*', '-', [[\]], '|', '/', '-', [[\]], '|' }) or 'rounded',
     noautocmd = true,
   })
+  vim.api.nvim_win_set_var(win, 'stay', false)
   vim.api.nvim_create_autocmd('BufLeave', {
     buffer = buf,
     callback = function()
