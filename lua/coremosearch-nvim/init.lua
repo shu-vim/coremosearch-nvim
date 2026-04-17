@@ -16,6 +16,9 @@ M.config = {
     { bg = '#0050BB', fg = 'white' },
   },
   highlight_exceeded = { link = 'Search' },
+  --
+  word_boundary_if_noargs = true,
+  --
   nohlsearch = true,
 }
 
@@ -125,6 +128,7 @@ function M.add(opts)
   else
     local word = escape(get_word_under_cursor())
     if word == '' then return end
+    if M.config.word_boundary_if_noargs then word = [[\<]] .. word .. [[\>]] end
     table.insert(words, word)
   end
 
