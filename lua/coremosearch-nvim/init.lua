@@ -172,6 +172,8 @@ function M.edit()
     vim.api.nvim_win_set_width(win, maxwid)
     vim.api.nvim_win_set_height(win, #words)
 
+    vim.api.nvim_win_set_option(win, 'modifiable', true)
+    vim.api.nvim_win_set_option(win, 'readonly', false)
     vim.api.nvim_buf_set_lines(vim.api.nvim_win_get_buf(win), 0, -1, true, words)
 
     vim.cmd('normal 4gg')
